@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.urls import path
-from apps.school.views import student
+from django.urls import path, include
+from apps.school.urls import school_router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('student/', student, name='student'),
+    path('', include(school_router.urls)),
 ]
