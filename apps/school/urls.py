@@ -1,5 +1,5 @@
 from rest_framework import routers
-from django.urls import path
+from django.urls import path, include
 from apps.school.views import StudentsViewSet, CoursesViewSet, \
     EnrollmentsViewSet, ListStudentEnrollments, ListCourseEnrollments
 
@@ -10,6 +10,8 @@ school_router.register('enrollments', EnrollmentsViewSet, basename='Enrollments'
 
 # Defining more specific routes that uses parameters
 urlpatterns = [
+    # Include the default routes defined in the router
+    path('', include(school_router.urls)),
     path(
         'student/<int:pk>/enrollments/',
         ListStudentEnrollments.as_view(),
