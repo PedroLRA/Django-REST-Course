@@ -40,4 +40,12 @@ class StudentEnrollmentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = ['course', 'shift']
-        
+
+class CourseEnrollmentsSerializer(serializers.ModelSerializer):
+    # Changing the values displayed for student and shift in the API:
+    student_name = serializers.ReadOnlyField(source='student.name')
+    shift = serializers.ReadOnlyField(source='get_shift_display')
+    
+    class Meta:
+        model = Enrollment
+        fields = ['student_name', 'shift']
