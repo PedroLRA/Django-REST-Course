@@ -18,7 +18,32 @@ class Course(models.Model):
 
     code = models.CharField(max_length=10)
     description = models.CharField(max_length=100)
-    level = models.CharField(max_length=1, choices=LEVEL, blank=False, null=False, default='B')
+    level = models.CharField(
+        max_length=1,
+        choices=LEVEL,
+        blank=False,
+        null=False,
+        default='B'
+    )
 
     def __str__(self):
         return self.description
+    
+class Enrollment(models.Model):
+    SHIFT = (
+        ('M', 'Morning'),
+        ('A', 'Afternoon'),
+        ('N', 'Night'),
+    )
+
+    # The tag models.CASCADE is used to delete the enrollment when the student
+    # or course related with this enrollment is deleted
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    shift = models.CharField(
+        max_length=1,
+        choices=SHIFT,
+        blank=False,
+        null=False,
+        default='M'
+    )
