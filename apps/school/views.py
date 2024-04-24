@@ -1,7 +1,7 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from apps.school.models import Student, Course, Enrollment
 from apps.school.serializer import StudentSerializer, CourseSerializer, \
-    EnrollmentSerializer
+    EnrollmentSerializer, StudentEnrollmentsSerializer
 
 class StudentsViewSet(viewsets.ModelViewSet):
     """
@@ -27,3 +27,17 @@ class EnrollmentsViewSet(viewsets.ModelViewSet):
 
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
+
+class ListStudentEnrollments(generics.ListAPIView):
+    """
+    Listing all enrollments of a student
+    """
+    # The use of generics.ListAPIView is to create a read only endpoint
+
+    def get_queryset(self):
+        studentId = self.kwargs['pk']
+        # The parameter name is defined in the urls.py as <int:pk>
+
+        queryset = Enrollment.objects.filter(student_id=studentId)
+        return queryset
+    serializer_class = StudentEnrollmentsSerializer

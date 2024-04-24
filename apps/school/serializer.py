@@ -24,3 +24,20 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         # We also can pass the attribute without any fields inside the list to
         # represent all the fields:
         #   exclude = [] is basically the same as fields = '__all__'
+
+class StudentEnrollmentsSerializer(serializers.ModelSerializer):
+    # Changing the values that will be displayed for course and shift in the API:
+    course = serializers.ReadOnlyField(source='course.description')
+
+    # To change the shift display , we can also user the ReadOnlyField and pass
+    # the source as the get method of the model:
+    #   shift = serializers.ReadOnlyField(source='get_shift_display')
+    # or we can use the following:
+    shift = serializers.SerializerMethodField()
+    def get_shift(self, obj):
+        return obj.get_shift_display()
+
+    class Meta:
+        model = Enrollment
+        fields = ['course', 'shift']
+        
