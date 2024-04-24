@@ -1,6 +1,7 @@
 from rest_framework import viewsets
-from apps.school.models import Student, Course
-from apps.school.serializer import StudentSerializer, CourseSerializer
+from apps.school.models import Student, Course, Enrollment
+from apps.school.serializer import StudentSerializer, CourseSerializer, \
+    EnrollmentSerializer
 
 class StudentsViewSet(viewsets.ModelViewSet):
     """
@@ -18,3 +19,11 @@ class CoursesViewSet(viewsets.ModelViewSet):
 
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
+class EnrollmentsViewSet(viewsets.ModelViewSet):
+    """
+    Display all Enrollments in the DB
+    """
+
+    queryset = Enrollment.objects.all()
+    serializer_class = EnrollmentSerializer

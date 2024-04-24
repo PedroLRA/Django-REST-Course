@@ -1,6 +1,5 @@
-from dataclasses import field
 from rest_framework import serializers
-from apps.school.models import Student, Course
+from apps.school.models import Student, Course, Enrollment
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +14,13 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = '__all__'
+
+class EnrollmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enrollment
+        exclude = []
+        # Using the exclude attribute we can remove the given fields from the 
+        # serialization.
+        # We also can pass the attribute without any fields inside the list to
+        # represent all the fields:
+        #   exclude = [] is basically the same as fields = '__all__'
