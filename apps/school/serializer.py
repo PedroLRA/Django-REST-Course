@@ -39,6 +39,28 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = '__all__'
 
+    # Validations
+    def validate(self, data):
+        # Since in this case we only have one field to use a custom validation,
+        # we can skip the use of a dictionary to store the validators.
+        # But, we will still use it in case of future need of more validations.
+        validators = {
+            'code': validate_code
+        }
+
+        errors = {}
+
+        for field, validator in validators.items():
+            try:
+                data[field] = validator(data[field])
+            except serializers.ValidationError as e:
+                errors[field] = e.detail
+
+        if errors:
+            raise serializers.ValidationError(errors)
+    
+        return data
+    
 class EnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
