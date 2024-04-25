@@ -3,7 +3,7 @@ from django.db import models
 class Student(models.Model):
     name = models.CharField(max_length=30)
     doc_rg = models.CharField(max_length=9)
-    doc_cpf = models.CharField(max_length=11)
+    doc_cpf = models.CharField(max_length=11, unique=True)
     birth = models.DateField()
 
     def __str__(self):
