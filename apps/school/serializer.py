@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from apps.school.models import Student, Course, Enrollment
+from apps.school.validators import *
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,6 +10,29 @@ class StudentSerializer(serializers.ModelSerializer):
         # ones: fields = ['id', 'name']
         # This way the serializer can be used as a filter between the DB
         # and the API
+
+    # Validations
+    def validate(self, data):
+        validators = {
+            'name': validate_name,
+            'doc_rg': validate_doc_rg,
+            'doc_cpf': validate_doc_cpf,
+            'birth': validate_birth
+        }
+
+        errors = {}
+
+        # Executing particular validations for each field
+        for field, validator in validators.items():
+            try:
+                data[field] = validator(data[field])
+            except serializers.ValidationError as e:
+                errors[field] = e.detail
+
+        if errors: # Raising any errors found during the validations
+            raise serializers.ValidationError(errors)
+
+        return data
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
