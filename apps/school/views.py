@@ -1,5 +1,6 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, filters
 from apps.school.models import Student, Course, Enrollment
+from django_filters.rest_framework import DjangoFilterBackend
 from apps.school.serializer import StudentSerializer, CourseSerializer, \
     EnrollmentSerializer, StudentEnrollmentsSerializer, CourseEnrollmentsSerializer
 
@@ -11,6 +12,14 @@ class StudentsViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
+    #Applying filters and ordering
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    ]
+    ordering_fields = ['name']
+    search_fields = ['name', 'doc_rg', 'doc_cpf']
 
 class CoursesViewSet(viewsets.ModelViewSet):
     """
@@ -20,6 +29,16 @@ class CoursesViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
+    #Applying filters and ordering
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    ]
+    ordering_fields = ['code']
+    search_fields = ['code']
+    filterset_fields = ['level']
+
 class EnrollmentsViewSet(viewsets.ModelViewSet):
     """
     Display all Enrollments in the DB
@@ -27,6 +46,16 @@ class EnrollmentsViewSet(viewsets.ModelViewSet):
 
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
+
+    #Applying filters and ordering
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    ]
+    ordering_fields = ['student', 'course']
+    search_fields = ['student', 'course']
+    filterset_fields = ['shift']
 
 class ListStudentEnrollments(generics.ListAPIView):
     """
@@ -42,6 +71,16 @@ class ListStudentEnrollments(generics.ListAPIView):
         return queryset
     serializer_class = StudentEnrollmentsSerializer
 
+    #Applying filters and ordering
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    ]
+    ordering_fields = ['course']
+    search_fields = ['course']
+    filterset_fields = ['shift']
+
 class ListCourseEnrollments(generics.ListAPIView):
     """
     Listing all enrollments of a course
@@ -52,3 +91,13 @@ class ListCourseEnrollments(generics.ListAPIView):
         queryset = Enrollment.objects.filter(course_id=courseId)
         return queryset
     serializer_class = CourseEnrollmentsSerializer
+
+    #Applying filters and ordering
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    ]
+    ordering_fields = ['student']
+    search_fields = ['student']
+    filterset_fields = ['shift']
