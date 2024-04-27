@@ -1,8 +1,9 @@
 from rest_framework import viewsets, generics, filters
 from apps.school.models import Student, Course, Enrollment
 from django_filters.rest_framework import DjangoFilterBackend
-from apps.school.serializer import StudentSerializer, CourseSerializer, \
-    EnrollmentSerializer, StudentEnrollmentsSerializer, CourseEnrollmentsSerializer
+from apps.school.serializer import StudentSerializer, StudentSerializerV2, \
+    CourseSerializer, EnrollmentSerializer, StudentEnrollmentsSerializer, \
+    CourseEnrollmentsSerializer
 
 class StudentsViewSet(viewsets.ModelViewSet):
     """
@@ -10,7 +11,6 @@ class StudentsViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Student.objects.all()
-    serializer_class = StudentSerializer
 
     #Applying filters and ordering
     filter_backends = [
@@ -20,6 +20,12 @@ class StudentsViewSet(viewsets.ModelViewSet):
     ]
     ordering_fields = ['name']
     search_fields = ['name', 'doc_rg', 'doc_cpf']
+
+    def get_serializer_class(self):
+        if self.request.version == '2':
+            return StudentSerializerV2
+        
+        return StudentSerializer
 
 class CoursesViewSet(viewsets.ModelViewSet):
     """

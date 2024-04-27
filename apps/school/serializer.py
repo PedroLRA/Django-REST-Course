@@ -5,7 +5,7 @@ from apps.school.validators import *
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = '__all__' 
+        exclude = ['phone_number'] 
         # If we don't want all the fields, we can give a list with the desired
         # ones: fields = ['id', 'name']
         # This way the serializer can be used as a filter between the DB
@@ -95,3 +95,36 @@ class CourseEnrollmentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = ['student_name', 'shift']
+
+## Serializers Version 2
+class StudentSerializerV2(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__' 
+        # If we don't want all the fields, we can give a list with the desired
+        # ones: fields = ['id', 'name']
+        # This way the serializer can be used as a filter between the DB
+        # and the API
+
+    # Validations
+    def validate(self, data):
+        validators = {
+            'name': validate_name,
+            'doc_rg': validate_doc_rg,
+            'doc_cpf': validate_doc_cpf,
+            'birth': validate_birth
+        }
+
+        errors = {}
+
+        # Executing particular validations for each field
+        for field, validator in validators.items():
+            try:
+                data[field] = validator(data[field])
+            except serializers.ValidationError as e:
+                errors[field] = e.detail
+
+        if errors: # Raising any errors found during the validations
+            raise serializers.ValidationError(errors)
+
+        return data
