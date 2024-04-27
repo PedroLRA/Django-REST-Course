@@ -10,6 +10,9 @@ class StudentsViewSet(viewsets.ModelViewSet):
     Display all students in the DB
     """
 
+    # To define specif http methods, we can use the following:
+    # http_method_names = ['get', 'post', 'put', 'patch']
+
     queryset = Student.objects.all()
 
     #Applying filters and ordering
