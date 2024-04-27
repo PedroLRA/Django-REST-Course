@@ -125,7 +125,16 @@ REST_FRAMEWORK = {
 
     # Versioning
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
+
+    # Throttling
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '20/day'
+    }
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
