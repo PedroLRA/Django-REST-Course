@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from apps.school.serializer import StudentSerializer, StudentSerializerV2, \
     CourseSerializer, EnrollmentSerializer, StudentEnrollmentsSerializer, \
     CourseEnrollmentsSerializer
+from apps.school.utils.viewsUtils import response_with_location
 
 class StudentsViewSet(viewsets.ModelViewSet):
     """
@@ -24,11 +25,16 @@ class StudentsViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name']
     search_fields = ['name', 'doc_rg', 'doc_cpf']
 
+    # Defining the serializer class based on the version of the API
+    # This consists in a overriden method to return the correct serializer
     def get_serializer_class(self):
-        if self.request.version == '2':
+        if self.request.GET.get('version') == '2':
             return StudentSerializerV2
-        
         return StudentSerializer
+
+    # Overriding the create method to add a custom response
+    def create(self, request):
+        return response_with_location(self, request)
 
 class CoursesViewSet(viewsets.ModelViewSet):
     """
@@ -48,6 +54,10 @@ class CoursesViewSet(viewsets.ModelViewSet):
     search_fields = ['code']
     filterset_fields = ['level']
 
+    # Overriding the create method to add a custom response
+    def create(self, request):
+        return response_with_location(self, request)
+
 class EnrollmentsViewSet(viewsets.ModelViewSet):
     """
     Display all Enrollments in the DB
@@ -65,6 +75,10 @@ class EnrollmentsViewSet(viewsets.ModelViewSet):
     ordering_fields = ['student', 'course']
     search_fields = ['student', 'course']
     filterset_fields = ['shift']
+
+    # Overriding the create method to add a custom response
+    def create(self, request):
+        return response_with_location(self, request)
 
 class ListStudentEnrollments(generics.ListAPIView):
     """
