@@ -13,12 +13,12 @@ urlpatterns = [
     # Include the default routes defined in the router
     path('', include(school_router.urls)),
     path(
-        'student/<int:pk>/enrollments/',
+        'students/<int:pk>/enrollments/',
         ListStudentEnrollments.as_view(),
         name='StudentEnrollments'
     ),
     path(
-        'course/<int:pk>/enrollments/',
+        'courses/<int:pk>/enrollments/',
         ListCourseEnrollments.as_view(),
         name='CourseEnrollments'
     ),
