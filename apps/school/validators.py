@@ -41,3 +41,21 @@ def validate_code(code):
     if not re.match(code_pattern, code):
         raise ValidationError('The course code should contain up to 5 letters followed up to 5 digits only')
     return code
+
+# Function to run validations
+def run_validators(data, validators):
+    """
+    Validate the data for each key in the validators dictionary where the key
+    is the field name and the value is the validation function to be executed.
+    """
+
+    errors = {}
+
+    for field, validator in validators.items():
+        try:
+            data[field] = validator(data[field])
+        except ValidationError as e:
+            errors[field] = e.detail
+
+    if errors:
+        raise ValidationError(errors)

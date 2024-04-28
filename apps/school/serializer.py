@@ -13,24 +13,15 @@ class StudentSerializer(serializers.ModelSerializer):
 
     # Validations
     def validate(self, data):
-        validators = {
-            'name': validate_name,
-            'doc_rg': validate_doc_rg,
-            'doc_cpf': validate_doc_cpf,
-            'birth': validate_birth
-        }
-
-        errors = {}
-
-        # Executing particular validations for each field
-        for field, validator in validators.items():
-            try:
-                data[field] = validator(data[field])
-            except serializers.ValidationError as e:
-                errors[field] = e.detail
-
-        if errors: # Raising any errors found during the validations
-            raise serializers.ValidationError(errors)
+        run_validators(
+            data,
+            validators = {
+                'name': validate_name,
+                'doc_rg': validate_doc_rg,
+                'doc_cpf': validate_doc_cpf,
+                'birth': validate_birth
+            }
+        )
 
         return data
 
@@ -42,23 +33,9 @@ class CourseSerializer(serializers.ModelSerializer):
     # Validations
     def validate(self, data):
         # Since in this case we only have one field to use a custom validation,
-        # we can skip the use of a dictionary to store the validators.
+        # we can skip the use of the run_validators function.
         # But, we will still use it in case of future need of more validations.
-        validators = {
-            'code': validate_code
-        }
-
-        errors = {}
-
-        for field, validator in validators.items():
-            try:
-                data[field] = validator(data[field])
-            except serializers.ValidationError as e:
-                errors[field] = e.detail
-
-        if errors:
-            raise serializers.ValidationError(errors)
-    
+        run_validators(data, validators = {'code': validate_code})
         return data
     
 class EnrollmentSerializer(serializers.ModelSerializer):
@@ -108,23 +85,13 @@ class StudentSerializerV2(serializers.ModelSerializer):
 
     # Validations
     def validate(self, data):
-        validators = {
-            'name': validate_name,
-            'doc_rg': validate_doc_rg,
-            'doc_cpf': validate_doc_cpf,
-            'birth': validate_birth
-        }
-
-        errors = {}
-
-        # Executing particular validations for each field
-        for field, validator in validators.items():
-            try:
-                data[field] = validator(data[field])
-            except serializers.ValidationError as e:
-                errors[field] = e.detail
-
-        if errors: # Raising any errors found during the validations
-            raise serializers.ValidationError(errors)
-
+        run_validators(
+            data,
+            validators = {
+                'name': validate_name,
+                'doc_rg': validate_doc_rg,
+                'doc_cpf': validate_doc_cpf,
+                'birth': validate_birth
+            }
+        )
         return data
