@@ -1,6 +1,8 @@
 from rest_framework import viewsets, generics, filters
 from apps.school.models import Student, Course, Enrollment
 from django_filters.rest_framework import DjangoFilterBackend
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from apps.school.serializer import StudentSerializer, StudentSerializerV2, \
     CourseSerializer, EnrollmentSerializer, StudentEnrollmentsSerializer, \
     CourseEnrollmentsSerializer
@@ -79,6 +81,11 @@ class EnrollmentsViewSet(viewsets.ModelViewSet):
     # Overriding the create method to add a custom response
     def create(self, request):
         return response_with_location(self, request)
+
+    # Saving the information in the cache for 60 seconds
+    @method_decorator(cache_page(60))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 class ListStudentEnrollments(generics.ListAPIView):
     """
