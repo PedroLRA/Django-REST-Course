@@ -1,30 +1,30 @@
 from rest_framework.serializers import ValidationError
 from django.utils import timezone
 from validate_docbr import CPF
-
+from apps.school.error_messages import ErrorMessages
 import re
 
 # Custom validation to Student model
 def validate_name(name):
     if not name.isalpha():
-        raise ValidationError('The name should only contain letters')
+        raise ValidationError(ErrorMessages.NAME_SHOULD_BE_ONLY_LETTERS)
     return name
 
 def validate_doc_cpf(doc_cpf):
     if len(doc_cpf) != 11:
-        raise ValidationError('The CPF should contain 11 digits')
+        raise ValidationError(ErrorMessages.CPF_SHOULD_CONTAIN_11_DIGITS)
     if not CPF().validate(doc_cpf):
-        raise ValidationError('The CPF must be valid')    
+        raise ValidationError(ErrorMessages.CPF_MUST_BE_VALID)    
     return doc_cpf
 
 def validate_doc_rg(doc_rg):
     if len(doc_rg) != 9:
-        raise ValidationError('The RG should contain 9 digits')
+        raise ValidationError(ErrorMessages.RG_SHOULD_CONTAIN_9_DIGITS)
     return doc_rg
 
 def validate_birth(birth):
     if birth > timezone.now().date():
-        raise ValidationError('The birth date should be in the past')
+        raise ValidationError(ErrorMessages.BIRTH_DATE_SHOULD_BE_PAST)
     return birth
 
 # Custom validation to Course model
@@ -39,7 +39,7 @@ def validate_code(code):
     code_pattern = '^[a-zA-Z]{1,5}[0-9]{1,5}$'
     
     if not re.match(code_pattern, code):
-        raise ValidationError('The course code should contain up to 5 letters followed up to 5 digits only')
+        raise ValidationError(ErrorMessages.INVALID_COURSE_CODE_FORMAT)
     return code
 
 # Function to run validations
