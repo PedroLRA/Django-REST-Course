@@ -133,3 +133,23 @@ class CourseTestCase(APITestCase):
 
             # Then the response should
             self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_successful_PUT_request_to_update_course(self):
+        # Given a put request
+        course_id = 1
+        new_data = {
+            'code':'UPDT1',
+            'description':'Updated Test Course 1',
+            'level':'B'
+        }
+        request = self.factory.put(self.list_url, new_data, format='json')
+        force_authenticate(request, user=self.demoUser)
+
+        # When the request is made
+        view = CoursesViewSet.as_view({'put': 'update'})
+        response = view(request, pk=course_id)
+
+        # Then the response should
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        new_data.update({'id': course_id})
+        self.assertEqual(response.data, new_data)
