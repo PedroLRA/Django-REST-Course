@@ -89,7 +89,7 @@ class CourseTestCase(APITestCase):
         ]
         
         for value in test_values:
-            with self.subTest(value=value):
+            with self.subTest(msg=f'Trying to create a course with invalid field: {value}'):
                 # Given a post request
                 post_data = {
                     'code': 'TC3',
@@ -108,6 +108,7 @@ class CourseTestCase(APITestCase):
                 self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_successful_DELETE_request_to_delete_course(self):
+        """ Test to check successful DELETE request"""
         with self.subTest(msg='Deleting the course'):
             # Given a delete request
             course_id = 1
@@ -135,6 +136,7 @@ class CourseTestCase(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_successful_PUT_request_to_update_course(self):
+        """ Test to check successful PUT request to update a course"""
         # Given a put request
         course_id = 1
         new_data = {
