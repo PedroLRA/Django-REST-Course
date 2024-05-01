@@ -11,6 +11,10 @@ class Student(models.Model):
     def __str__(self):
         return self.name
     
+    # Apllying common ordering
+    class Meta:
+        ordering = ['id']
+
 class Course(models.Model):
     LEVEL = (
         ('B', 'Basic'),
@@ -31,6 +35,9 @@ class Course(models.Model):
     def __str__(self):
         return self.description
     
+    class Meta:
+        ordering = ['id']
+    
 class Enrollment(models.Model):
     SHIFT = (
         ('M', 'Morning'),
@@ -49,3 +56,6 @@ class Enrollment(models.Model):
         null=False,
         default='M'
     )
+
+    class Meta:
+        ordering = ['id']
