@@ -107,3 +107,29 @@ class CourseTestCase(APITestCase):
                 # Then the response should:
                 self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_successful_DELETE_request_to_delete_course(self):
+        with self.subTest(msg='Deleting the course'):
+            # Given a delete request
+            course_id = 1
+            request = self.factory.delete(self.list_url)
+            force_authenticate(request, user=self.demoUser)
+
+            # When the request is made
+            view = CoursesViewSet.as_view({'delete': 'destroy'})
+            response = view(request, pk=course_id)
+
+            # Then the response should
+            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        with self.subTest(msg='Check if the course was deleted'):
+            # Given a get request
+            course_id = 1
+            request = self.factory.get(self.list_url)
+            force_authenticate(request, user=self.demoUser)
+
+            # When the request is made
+            view = CoursesViewSet.as_view({'get': 'retrieve'})
+            response = view(request, pk=course_id)
+
+            # Then the response should
+            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
