@@ -155,3 +155,39 @@ class CourseTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         new_data.update({'id': course_id})
         self.assertEqual(response.data, new_data)
+
+    def test_failure_PUT_request_to_update_course(self):
+        """ Test to check fail PUT request when invalid data is sent"""
+        test_values = [
+            {'code':None},
+            {'code':''},
+            {'code':'1TC3'},
+            {'code':'TTT'},
+            {'code':'111'},
+            {'code':'TTTCCC2'},
+            {'description':None},
+            {'description':''},
+            {'level':None},
+            {'level':''},
+            {'level':'C'}
+        ]
+        
+        for value in test_values:
+            with self.subTest(msg=f'Trying to update a course with invalid data: {value}'):
+                # Given a put request
+                course_id = 1
+                new_data = {
+                    'code': 'TC1',
+                    'description': 'Test Course 1',
+                    'level': 'A'
+                }
+                new_data.update(value) # updating dict with the invalid value
+                request = self.factory.put(self.list_url, new_data, format='json')
+                force_authenticate(request, user=self.demoUser)
+
+                # When the request is made
+                view = CoursesViewSet.as_view({'put': 'update'})
+                response = view(request, pk=course_id)
+                
+                # Then the response should:
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
