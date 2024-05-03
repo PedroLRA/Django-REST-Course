@@ -37,7 +37,7 @@ class CourseSerializer(serializers.ModelSerializer):
         # But, we will still use it in case of future need of more validations.
         run_validators(data, validators = {'code': validate_code})
         return data
-    
+
 class EnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
@@ -68,7 +68,7 @@ class CourseEnrollmentsSerializer(serializers.ModelSerializer):
     # Changing the values displayed for student and shift in the API:
     student_name = serializers.ReadOnlyField(source='student.name')
     shift = serializers.ReadOnlyField(source='get_shift_display')
-    
+
     class Meta:
         model = Enrollment
         fields = ['student_name', 'shift']

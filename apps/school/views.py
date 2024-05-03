@@ -3,7 +3,7 @@ from apps.school.models import Student, Course, Enrollment
 from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from apps.school.serializer import StudentSerializer, StudentSerializerV2, \
+from apps.school.serializers import StudentSerializer, StudentSerializerV2, \
     CourseSerializer, EnrollmentSerializer, StudentEnrollmentsSerializer, \
     CourseEnrollmentsSerializer
 from apps.school.utils.viewsUtils import response_with_location
