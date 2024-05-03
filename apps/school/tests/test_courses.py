@@ -18,6 +18,7 @@ class CourseTestCase(APITestCase):
         self.demoUser = User.objects.create_user(
             username='demoUser', password='password'
         )
+
         # giving permissions to the demo user
         content_type = ContentType.objects.get_for_model(Course)
         permissions = Permission.objects.filter(content_type=content_type)
@@ -37,6 +38,9 @@ class CourseTestCase(APITestCase):
             description = 'Test Course 2',
             level = 'B'
         )
+
+        # Removing throttling for testing purposes
+        CoursesViewSet.throttle_classes = []
 
     def test_GET_request_to_list_courses(self):
         """ Test to check GET request to list courses """
@@ -66,7 +70,7 @@ class CourseTestCase(APITestCase):
         # When the request is made
         view = CoursesViewSet.as_view({'post': 'create'})
         response = view(request)
-        
+
         # Then the response should:
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         post_data.update({'id': 3}) # adding the expected id to posted data to compare
@@ -87,7 +91,7 @@ class CourseTestCase(APITestCase):
             {'level':''},
             {'level':'C'}
         ]
-        
+
         for value in test_values:
             with self.subTest(msg=f'Trying to create a course with invalid field: {value}'):
                 # Given a post request
@@ -103,7 +107,7 @@ class CourseTestCase(APITestCase):
                 # When the request is made
                 view = CoursesViewSet.as_view({'post': 'create'})
                 response = view(request)
-                
+
                 # Then the response should:
                 self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -171,7 +175,7 @@ class CourseTestCase(APITestCase):
             {'level':''},
             {'level':'C'}
         ]
-        
+
         for value in test_values:
             with self.subTest(msg=f'Trying to update a course with invalid data: {value}'):
                 # Given a put request
@@ -188,6 +192,6 @@ class CourseTestCase(APITestCase):
                 # When the request is made
                 view = CoursesViewSet.as_view({'put': 'update'})
                 response = view(request, pk=course_id)
-                
+
                 # Then the response should:
                 self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
