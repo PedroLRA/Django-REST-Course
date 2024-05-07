@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework_xml.renderers.XMLRenderer',
     ],
+
+    # Schema classes
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # Internationalization
@@ -187,3 +191,17 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", # Port for the react app given in the classes
     # In case that we want to allow other origins, we can add them here
 ]
+
+# DRF-Spectacular Schema settings
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': "Alura's Django REST course API",
+    'DESCRIPTION': "API developed during the Alura's Django REST course.",
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+        "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+    },
+}
