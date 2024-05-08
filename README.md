@@ -16,7 +16,7 @@ During the course and the development of the application, the following topics w
 - API documentation with Swagger
 - Integration with Postman for testing
 
-# Running the project
+# Running the API
 
 ### 1. clone the repository from Github.
 
@@ -69,8 +69,6 @@ $ python manage.py compliemessages
 ```
 
 ### 7. Create a superuser
-
-To create a superuser, you can run the following code:
 
 ```sh
 python manage.py createsuperuser
